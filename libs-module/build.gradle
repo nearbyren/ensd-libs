@@ -22,8 +22,6 @@ afterEvaluate {
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'libs'
                 version = '1.0.0'
-                // 必须有这个 否则不会上传AAR包
-                afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
             }
         }
     }
