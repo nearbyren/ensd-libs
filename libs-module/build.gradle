@@ -62,12 +62,22 @@ android {
     buildFeatures {
         dataBinding true
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
     testImplementation Testing.jUnit
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
-    api fileTree(dir: "libs", include: ["*.jar","*.aar"])
+    implementation(name: 'auth_number', ext: 'aar')
+    implementation(name: 'Baidu', ext: 'aar')
+    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
+    implementation(name: 'logger-2.1.4-release', ext: 'aar')
+    implementation(name: 'main-2.1.4-release', ext: 'aar')
+
 
 }
