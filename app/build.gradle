@@ -49,7 +49,6 @@ android {
 dependencies {
     //https://blog.csdn.net/yuanzhihui123/article/details/123653733
     //解决：Direct local .aar file dependencies are not supported when building an AAR.
-    api fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation AndroidX.appcompat
 
 }
