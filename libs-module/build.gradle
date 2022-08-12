@@ -78,6 +78,7 @@ dependencies {
     api(name: 'crashshield-2.1.4-release', ext: 'aar')
     api(name: 'logger-2.1.4-release', ext: 'aar')
     api(name: 'main-2.1.4-release', ext: 'aar')
+    implementation AndroidX.appcompat
 
 
 }
