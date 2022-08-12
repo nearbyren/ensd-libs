@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ejiayou.libs">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="ejiayou.libs.CommonApp"
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:resizeableActivity="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name="ejiayou.libs.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="ejiayou.libs.TestARouterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ejiayou.libs.TestInterruptActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ejiayou.libs.TestWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ejiayou.libs.TestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ejiayou.libs.TestFileActivity"
+            android:screenOrientation="portrait" />
+
+
+    </application>
+    <meta-data
+        android:name="android.max_aspect"
+        android:value="2.2" />
+</manifest>

@@ -1,0 +1,58 @@
+import ejiayou.composing.builds.ThirdLib
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'ejiayou.composing.builds'
+    id 'kotlin-kapt'
+}
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+
+android {
+    compileSdk 30
+
+    defaultConfig {
+        applicationId "ejiayou.libs"
+        minSdk 21
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    packagingOptions {exclude 'META-INF/rxjava.properties'}
+
+    buildFeatures {
+        dataBinding true
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    //https://blog.csdn.net/yuanzhihui123/article/details/123653733
+    //解决：Direct local .aar file dependencies are not supported when building an AAR.
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+}
