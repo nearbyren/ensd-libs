@@ -14,3 +14,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+libs/auth/build
+libs/authlog/build
+libs/authmain/build
+libs/authucarsh/build
+libs/baidu/build

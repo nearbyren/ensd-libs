@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('crashshield-2.1.4-release.aar'))

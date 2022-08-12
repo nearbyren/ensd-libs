@@ -54,22 +54,17 @@ android {
     buildFeatures {
         dataBinding true
     }
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
 }
 
 dependencies {
+    api project(path: ':libs:baidu')
+    api project(path: ':libs:auth')
+    api project(path: ':libs:authmain')
+    api project(path: ':libs:authucarsh')
+    api project(path: ':libs:authlog')
     testImplementation Testing.jUnit
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
-    api(name: 'auth_number', ext: 'aar')
-    api(name: 'Baidu', ext: 'aar')
-    api(name: 'crashshield-2.1.4-release', ext: 'aar')
-    api(name: 'logger-2.1.4-release', ext: 'aar')
-    api(name: 'main-2.1.4-release', ext: 'aar')
     implementation AndroidX.appcompat
 
 

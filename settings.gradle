@@ -10,5 +10,10 @@
 rootProject.name = "ensd-libs"
 include ':app'
 include ':libs-module'
-//本地使用方式 时可以打开下面的开关，然后调整根composing-builds部分代码块，即可导入相应插件
-//includeBuild("composing-builds")
+include ':libs:baidu'
+
+include ':libs:auth'
+include ':libs:authmain'
+include ':libs:authucarsh'
+include ':libs:authlog'
+//implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
