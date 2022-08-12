@@ -1,5 +1,4 @@
 import ejiayou.composing.builds.AndroidX
-import ejiayou.composing.builds.ThirdLib
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
