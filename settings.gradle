@@ -10,10 +10,8 @@
 rootProject.name = "ensd-libs"
 include ':app'
 include ':libs-module'
-include ':libs:baidu'
-
-include ':libs:auth'
-include ':libs:authmain'
-include ':libs:authucarsh'
-include ':libs:authlog'
-//implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+//include ':libs:baidu'
+//include ':libs:auth'
+//include ':libs:authmain'
+//include ':libs:authucarsh'
+//include ':libs:authlog'

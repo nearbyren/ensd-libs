@@ -51,17 +51,16 @@ android {
         jvmTarget = '1.8'
     }
 
-    buildFeatures {
-        dataBinding true
-    }
 }
 
 dependencies {
-    api project(path: ':libs:baidu')
-    api project(path: ':libs:auth')
-    api project(path: ':libs:authmain')
-    api project(path: ':libs:authucarsh')
-    api project(path: ':libs:authlog')
+//    api project(path: ':libs:baidu')
+//    api project(path: ':libs:auth')
+//    api project(path: ':libs:authmain')
+//    api project(path: ':libs:authucarsh')
+//    api project(path: ':libs:authlog')
+    api fileTree(dir: "libs", include: ["*.jar","*.aar"])
+
     testImplementation Testing.jUnit
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
