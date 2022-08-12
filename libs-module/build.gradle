@@ -50,17 +50,17 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    task makeJar(type: Jar){
+        //删除存在的
+        delete 'build/libs/newsdk.jar'  //删除存在的
+        archivesBaseName = 'newsdk'  //输出的jar包名称
+        from(project.zipTree('build/intermediates/packaged-classes/release/libs/auth_number.aar')) //需要打包的第三方jar包
 
+    }
+    makeJar.dependsOn(build)
 }
 
 dependencies {
-//    api project(path: ':libs:baidu')
-//    api project(path: ':libs:auth')
-//    api project(path: ':libs:authmain')
-//    api project(path: ':libs:authucarsh')
-//    api project(path: ':libs:authlog')
-    api fileTree(dir: "libs", include: ["*.jar","*.aar"])
-
     testImplementation Testing.jUnit
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
