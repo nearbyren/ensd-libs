@@ -10,7 +10,10 @@ plugins {
     id 'kotlin-kapt'
 
 }
-
+task generateSourcesJar(type:Jar){
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
 afterEvaluate {
     publishing {
         publications {
@@ -52,6 +55,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
@@ -59,6 +67,16 @@ dependencies {
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
     implementation AndroidX.appcompat
-    api fileTree(dir: "libs",includes: ['*.jar','*.aar'])
+    implementation(name: 'auth_number', ext: 'aar')
+    implementation(name: 'BaiduLBS_AndroidSDK_Lib', ext: 'aar')
+    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
+    implementation(name: 'logger-2.1.4-release', ext: 'aar')
+    implementation(name: 'main-2.1.4-release', ext: 'aar')
+
+//    api project(path: ':libs:baidu')
+//    api project(path: ':libs:auth')
+//    api project(path: ':libs:authmain')
+//    api project(path: ':libs:authucarsh')
+//    api project(path: ':libs:authlog')
 
 }
