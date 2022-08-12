@@ -8,12 +8,29 @@ plugins {
     id 'kotlin-android-extensions'
     id 'maven-publish'
     id 'kotlin-kapt'
+    id 'com.kezong.fat-aar'
 
 }
-task generateSourcesJar(type:Jar){
-    from android.sourceSets.main.java.srcDirs
-    classifier "sources"
+//生成文档注释
+task androidJavadocs(type: Javadoc) {
+    failOnError = false
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath += files(ext.androidJar)
 }
+//将文档打包成jar
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+//将源码打包，这一点对kotlin来说很重要，否则业务侧无法看到源码
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+configurations.maybeCreate("default")
+def publishArtifact = artifacts.add("default", file('libs/auth_number.aar'))
+
 afterEvaluate {
     publishing {
         publications {
@@ -22,10 +39,24 @@ afterEvaluate {
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'libs'
                 version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact publishArtifact    //Example: *./target/myJavaClasses.jar*
             }
         }
+//        repositories {
+//            maven {
+//                url uri('../local_maverepo')
+////            credentials {
+////                username "default"
+////                password "default"
+////            }
+//            }
+//        }
     }
 }
+
 android {
     compileSdk 30
 
@@ -65,13 +96,13 @@ dependencies {
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
     implementation AndroidX.appcompat
-    implementation(name: 'auth_number', ext: 'aar')
-    implementation(name: 'BaiduLBS_AndroidSDK_Lib', ext: 'aar')
-    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
-    implementation(name: 'logger-2.1.4-release', ext: 'aar')
-    implementation(name: 'main-2.1.4-release', ext: 'aar')
+//    implementation(name: 'auth_number', ext: 'aar')
+//    implementation(name: 'BaiduLBS_AndroidSDK_Lib', ext: 'aar')
+//    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
+//    implementation(name: 'logger-2.1.4-release', ext: 'aar')
+//    implementation(name: 'main-2.1.4-release', ext: 'aar')
 
-//    api project(path: ':libs:baidu')
+    api project(path: ':libs:baidu')
 //    api project(path: ':libs:auth')
 //    api project(path: ':libs:authmain')
 //    api project(path: ':libs:authucarsh')
