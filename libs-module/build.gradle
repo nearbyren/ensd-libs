@@ -73,11 +73,11 @@ dependencies {
     testImplementation Testing.jUnit
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
-    implementation(name: 'auth_number', ext: 'aar')
-    implementation(name: 'Baidu', ext: 'aar')
-    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
-    implementation(name: 'logger-2.1.4-release', ext: 'aar')
-    implementation(name: 'main-2.1.4-release', ext: 'aar')
+    api(name: 'auth_number', ext: 'aar')
+    api(name: 'Baidu', ext: 'aar')
+    api(name: 'crashshield-2.1.4-release', ext: 'aar')
+    api(name: 'logger-2.1.4-release', ext: 'aar')
+    api(name: 'main-2.1.4-release', ext: 'aar')
 
 
 }
