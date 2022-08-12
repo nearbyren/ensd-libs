@@ -19,6 +19,8 @@ afterEvaluate {
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'libs'
                 version = '1.0.0'
+                // 必须有这个 否则不会上传AAR包
+                afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
             }
         }
     }
@@ -50,14 +52,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    task makeJar(type: Jar){
-        //删除存在的
-        delete 'build/libs/newsdk.jar'  //删除存在的
-        archivesBaseName = 'newsdk'  //输出的jar包名称
-        from(project.zipTree('build/intermediates/packaged-classes/release/libs/auth_number.aar')) //需要打包的第三方jar包
-
-    }
-    makeJar.dependsOn(build)
 }
 
 dependencies {
@@ -65,6 +59,6 @@ dependencies {
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
     implementation AndroidX.appcompat
-    implementation fileTree(dir: "libs",includes: ['*.jar','*.aar'])
+    api fileTree(dir: "libs",includes: ['*.jar','*.aar'])
 
 }
