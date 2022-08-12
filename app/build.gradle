@@ -5,12 +5,6 @@ plugins {
     id 'ejiayou.composing.builds'
     id 'kotlin-kapt'
 }
-kapt {
-    arguments {
-        arg("AROUTER_MODULE_NAME", project.getName())
-    }
-}
-
 android {
     compileSdk 30
 
