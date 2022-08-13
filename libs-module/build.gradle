@@ -24,46 +24,6 @@ task androidSourcesJar(type: Jar) {
 configurations.maybeCreate("default")
 def publishArtifact = artifacts.add("default", file('libs/BaiduLBS_AndroidSDK_Lib.aar'))
 
-//拷贝工程里的所有依赖到allLibs下面
-task copyAllDependencies(type: Copy) {
-    group "copy jar"
-    description "拷贝工程里的所有依赖到allLibs下面"
-    //referring to the 'compile' configuration
-    from configurations.compile
-    into 'allLibs'
-}
-
-//工程中所有gradle jar依赖信息
-ext.gradleJarDepends =[]
-
-//遍历所有依赖的jar包信息打印到控制台
-task printDeclaredDependenciesJar(dependsOn: copyAllDependencies) {
-    group "iterate declared dependencies"
-    description "遍历工程中所有依赖的jar包信息上传至maven库"
-    doLast {
-        gradleJarDepends = [];
-        configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { artifact ->
-            def id = artifact.moduleVersion.id
-            //println "group: ${id.group}, name: ${id.name}, version: ${id.version} ,type:${artifact.type},extension:${artifact.extension}"
-            if(!"${id.group}".startsWith("CAP")){
-                gradleJarDepends.add("${id}")
-            }
-        }
-        println "总共:" + gradleJarDepends.size + "个"
-        def sb =new StringBuffer();
-        sb.append("[")
-        for (int i = 0; i <gradleJarDepends.size; i++) {
-            if(i>0){
-                sb.append(",");
-            }
-            sb.append("\""+ gradleJarDepends.get(i) + "\"");
-        }
-        sb.append("]")
-        println sb
-    }
-}
-
-
 afterEvaluate {
     publishing {
 
