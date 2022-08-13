@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-def publishArtifact = artifacts.add("default", file('libs/BaiduLBS_AndroidSDK_Lib.aar'))

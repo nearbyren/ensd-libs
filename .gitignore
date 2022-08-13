@@ -19,3 +19,4 @@ libs/authlog/build
 libs/authmain/build
 libs/authucarsh/build
 libs/baidu/build
+LocalRepo/baidu/build
