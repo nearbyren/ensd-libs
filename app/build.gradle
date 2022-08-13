@@ -48,7 +48,7 @@ dependencies {
     //https://blog.csdn.net/yuanzhihui123/article/details/123653733
     //解决：Direct local .aar file dependencies are not supported when building an AAR.
     implementation "androidx.appcompat:appcompat:1.3.1"
-    api project(path: ':LocalRepo:baidu')
+//    api project(path: ':LocalRepo:baidu')
 //    implementation fileTree(dir: "libs",includes: ['*.jar','*.aar'])
 
 
