@@ -21,8 +21,6 @@ task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
 }
-configurations.maybeCreate("default")
-def publishArtifact = artifacts.add("default", file('libs/BaiduLBS_AndroidSDK_Lib.aar'))
 
 afterEvaluate {
     publishing {
@@ -55,8 +53,6 @@ afterEvaluate {
                 version = '1.0.0'
                 artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
                 artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
-                // 将aar推送到远程仓库
-                artifact publishArtifact //Example: *./target/myJavaClasses.jar*
             }
         }
 
@@ -100,8 +96,6 @@ dependencies {
 //    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
 //    implementation(name: 'logger-2.1.4-release', ext: 'aar')
 //    implementation(name: 'main-2.1.4-release', ext: 'aar')
-    api project(path: ':aar-lib')
-
 //    api project(path: ':libs:baidu')
 //    api project(path: ':libs:auth')
 //    api project(path: ':libs:authmain')
