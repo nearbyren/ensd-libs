@@ -10,7 +10,8 @@
 rootProject.name = "ensd-libs"
 include ':app'
 include ':libs-module'
-include ':libs:baidu'
+//include ':libs:baidu'
+include ':aar-lib'
 //include ':libs:auth'
 //include ':libs:authmain'
 //include ':libs:authucarsh'

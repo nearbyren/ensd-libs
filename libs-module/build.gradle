@@ -1,15 +1,8 @@
-import ejiayou.composing.builds.AndroidX
-import ejiayou.composing.builds.Testing
-
 plugins {
     id 'com.android.library'
-    id 'ejiayou.composing.builds'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'maven-publish'
-    id 'kotlin-kapt'
-    id 'com.kezong.fat-aar'
-
 }
 //生成文档注释
 task androidJavadocs(type: Javadoc) {
@@ -29,33 +22,87 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 configurations.maybeCreate("default")
-def publishArtifact = artifacts.add("default", file('libs/auth_number.aar'))
+def publishArtifact = artifacts.add("default", file('libs/BaiduLBS_AndroidSDK_Lib.aar'))
+
+//拷贝工程里的所有依赖到allLibs下面
+task copyAllDependencies(type: Copy) {
+    group "copy jar"
+    description "拷贝工程里的所有依赖到allLibs下面"
+    //referring to the 'compile' configuration
+    from configurations.compile
+    into 'allLibs'
+}
+
+//工程中所有gradle jar依赖信息
+ext.gradleJarDepends =[]
+
+//遍历所有依赖的jar包信息打印到控制台
+task printDeclaredDependenciesJar(dependsOn: copyAllDependencies) {
+    group "iterate declared dependencies"
+    description "遍历工程中所有依赖的jar包信息上传至maven库"
+    doLast {
+        gradleJarDepends = [];
+        configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+            def id = artifact.moduleVersion.id
+            //println "group: ${id.group}, name: ${id.name}, version: ${id.version} ,type:${artifact.type},extension:${artifact.extension}"
+            if(!"${id.group}".startsWith("CAP")){
+                gradleJarDepends.add("${id}")
+            }
+        }
+        println "总共:" + gradleJarDepends.size + "个"
+        def sb =new StringBuffer();
+        sb.append("[")
+        for (int i = 0; i <gradleJarDepends.size; i++) {
+            if(i>0){
+                sb.append(",");
+            }
+            sb.append("\""+ gradleJarDepends.get(i) + "\"");
+        }
+        sb.append("]")
+        println sb
+    }
+}
+
 
 afterEvaluate {
     publishing {
+
+        // Repositories *to* which Gradle can publish artifacts
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                url = '../repo'
+            }
+
+/*            maven {
+                name "sonartype-Staging"
+                // change to point to your repo, e.g. http://my.org/repo
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                //  https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }*/
+        }
+
+
         publications {
-            release(MavenPublication) {
-                from components.release
+            MyPublication(MavenPublication) {
+                // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'libs'
                 version = '1.0.0'
                 artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
                 artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
                 // 将aar推送到远程仓库
-                artifact publishArtifact    //Example: *./target/myJavaClasses.jar*
+                artifact publishArtifact //Example: *./target/myJavaClasses.jar*
             }
         }
-//        repositories {
-//            maven {
-//                url uri('../local_maverepo')
-////            credentials {
-////                username "default"
-////                password "default"
-////            }
-//            }
-//        }
+
     }
 }
+
 
 android {
     compileSdk 30
@@ -84,25 +131,18 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
 }
 
 dependencies {
-    testImplementation Testing.jUnit
-    androidTestImplementation Testing.androidJunit
-    androidTestImplementation Testing.espresso
-    implementation AndroidX.appcompat
+    implementation "androidx.appcompat:appcompat:1.3.1"
 //    implementation(name: 'auth_number', ext: 'aar')
 //    implementation(name: 'BaiduLBS_AndroidSDK_Lib', ext: 'aar')
 //    implementation(name: 'crashshield-2.1.4-release', ext: 'aar')
 //    implementation(name: 'logger-2.1.4-release', ext: 'aar')
 //    implementation(name: 'main-2.1.4-release', ext: 'aar')
+    api project(path: ':aar-lib')
 
-    api project(path: ':libs:baidu')
+//    api project(path: ':libs:baidu')
 //    api project(path: ':libs:auth')
 //    api project(path: ':libs:authmain')
 //    api project(path: ':libs:authucarsh')

@@ -1,10 +1,7 @@
-import ejiayou.composing.builds.AndroidX
 
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'ejiayou.composing.builds'
-    id 'kotlin-kapt'
 }
 android {
     compileSdk 30
@@ -49,7 +46,7 @@ android {
 dependencies {
     //https://blog.csdn.net/yuanzhihui123/article/details/123653733
     //解决：Direct local .aar file dependencies are not supported when building an AAR.
-    implementation AndroidX.appcompat
+    implementation "androidx.appcompat:appcompat:1.3.1"
 //    implementation fileTree(dir: "libs",includes: ['*.jar','*.aar'])
 
 }
