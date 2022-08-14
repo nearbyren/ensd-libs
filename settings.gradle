@@ -11,6 +11,7 @@ rootProject.name = "ensd-libs"
 include ':app'
 include ':libs-module'
 include ':LocalRepo:baidu'
+include ':LocalRepo:auth'
 //include ':libs:baidu'
 
 //include ':libs:auth'

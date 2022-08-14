@@ -1,10 +1,73 @@
 //maven-publish 新方式
-plugins {
-    //todo 1 上传插件
-    id 'maven-publish'
+/*//拷贝工程里的所有依赖到allLibs下面
+task copyAllDependencies(type: Copy) {
+    group "copy jar"
+    description "拷贝工程里的所有依赖到allLibs下面"
+    //referring to the 'compile' configuration
+    from configurations.compile
+    into 'allLibs'
 }
 
-afterEvaluate{
+//工程中所有gradle jar依赖信息
+ext.gradleJarDepends =[]
+
+//遍历所有依赖的jar包信息打印到控制台
+task printDeclaredDependenciesJar(dependsOn: copyAllDependencies) {
+    group "iterate declared dependencies"
+    description "遍历工程中所有依赖的jar包信息上传至maven库"
+    doLast {
+        gradleJarDepends = [];
+        configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+            def id = artifact.moduleVersion.id
+            //println "group: ${id.group}, name: ${id.name}, version: ${id.version} ,type:${artifact.type},extension:${artifact.extension}"
+            if(!"${id.group}".startsWith("CAP")){
+                gradleJarDepends.add("${id}")
+            }
+        }
+        println "总共:" + gradleJarDepends.size + "个"
+        def sb =new StringBuffer();
+        sb.append("[")
+        for (int i = 0; i <gradleJarDepends.size; i++) {
+            if(i>0){
+                sb.append(",");
+            }
+            sb.append("\""+ gradleJarDepends.get(i) + "\"");
+        }
+        sb.append("]")
+        println sb
+    }
+}*/
+
+//将本地所有依赖jar包上传中中央库
+/*publishing{
+    publications{
+        gradleJarDepends.each{
+            String[] args = it.split(":");
+            def fileName = "allLibs/"+args[1]+"-"+args[2]+".jar";
+            def taskId = args[1]+"-"+args[2];
+            println "${fileName}"
+            publishing.publications.create(taskId, MavenPublication) {
+                artifact "${fileName}"
+                groupId args[0]
+                artifactId args[1]
+                version args[2]
+            }
+        }
+    }
+    repositories {
+        maven {
+            //仓库地址
+            url  "http://xxx:8081/nexus/content/repositories/xxx/"
+            credentials {
+                username = "admin"  //发布到仓库用户名
+                password = "admin123"  //发布到仓库地址
+            }
+        }
+    }
+}*/
+
+
+/*afterEvaluate{
     publishing {
         publications {
 
@@ -76,5 +139,83 @@ afterEvaluate{
 //            }
             }
         }
+    }
+}*/
+
+//生成文档注释
+task androidJavadocs(type: Javadoc) {
+    failOnError = false
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath += files(ext.androidJar)
+}
+//将文档打包成jar
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+//将源码打包，这一点对kotlin来说很重要，否则业务侧无法看到源码
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+println("路径 = "+(new File('../baidu/BaiduLBS_AndroidSDK_Lib.aar')))
+configurations.maybeCreate("default")
+def publishArtifact = artifacts.add("default", file('../LocalRepo/baidu/BaiduLBS_AndroidSDK_Lib.aar'))
+
+afterEvaluate {
+    publishing {
+
+        // Repositories *to* which Gradle can publish artifacts
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                url = '../repo'
+            }
+
+/*            maven {
+                name "sonartype-Staging"
+                // change to point to your repo, e.g. http://my.org/repo
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                //  https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }*/
+        }
+
+
+        publications {
+            MyPublication(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'libs'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact publishArtifact    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                /*pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }*/
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+        }
+
     }
 }

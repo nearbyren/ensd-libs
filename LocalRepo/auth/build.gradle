@@ -1,0 +1,2 @@
+configurations.maybeCreate("default2")
+def publishArtifact = artifacts.add("default2", file('../auth/auth_number.aar'))
