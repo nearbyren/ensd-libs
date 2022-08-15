@@ -20,3 +20,7 @@ libs/authmain/build
 libs/authucarsh/build
 libs/baidu/build
 LocalRepo/baidu/build
+LocalRepo/auth/build
+LocalRepo/authlog/build
+LocalRepo/authmain/build
+LocalRepo/authucarsh/build

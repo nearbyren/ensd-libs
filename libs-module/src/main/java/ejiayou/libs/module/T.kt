@@ -7,8 +7,9 @@ import android.util.Log
  * @created on: 2022/8/13 9:22 下午
  * @description:
  */
-object T {
+class T {
+
     fun test() {
-        Log.d("t","ttt")
+        Log.d("t", "test")
     }
 }
