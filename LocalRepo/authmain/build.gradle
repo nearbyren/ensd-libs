@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def authmain = artifacts.add("default", file('../authmain/main-2.1.4-release.aar'))

@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def authlog = artifacts.add("default", file('../authlog/logger-2.1.4-release.aar'))

@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def authucarsh = artifacts.add("default", file('../authucarsh/crashshield-2.1.4-release.aar'))
