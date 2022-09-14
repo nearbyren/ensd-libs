@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def abcbank = artifacts.add("default", file('../abcbank/BankABCCaller.jar'))

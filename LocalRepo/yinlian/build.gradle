@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def yinlian = artifacts.add("default", file('../yinlian/UPPayAssistEx.jar'))
