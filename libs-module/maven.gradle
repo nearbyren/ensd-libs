@@ -1,0 +1,265 @@
+apply plugin: 'maven-publish'
+
+//生成文档注释
+task androidJavadocs(type: Javadoc) {
+    failOnError = false
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath += files(ext.androidJar)
+}
+//将文档打包成jar
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+//将源码打包，这一点对kotlin来说很重要，否则业务侧无法看到源码
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+configurations.maybeCreate("default")
+def baidu = artifacts.add("default", file('../LocalRepo/baidu/BaiduLBS_AndroidSDK_Lib.aar'))
+configurations.maybeCreate("default")
+def auth = artifacts.add("default", file('../LocalRepo/auth/auth_number.aar'))
+configurations.maybeCreate("default")
+def authlog = artifacts.add("default", file('../LocalRepo/authlog/logger-2.1.4-release.aar'))
+configurations.maybeCreate("default")
+def authmain = artifacts.add("default", file('../LocalRepo/authmain/main-2.1.4-release.aar'))
+configurations.maybeCreate("default")
+def authucarsh = artifacts.add("default", file('../LocalRepo/authucarsh/crashshield-2.1.4-release.aar'))
+configurations.maybeCreate("default")
+def yinlian = artifacts.add("default", file('../LocalRepo/yinlian/UPPayAssistEx.jar'))
+configurations.maybeCreate("default")
+def abcbank = artifacts.add("default", file('../LocalRepo/abcbank/BankABCCaller.jar'))
+
+afterEvaluate {
+    publishing {
+
+        // Repositories *to* which Gradle can publish artifacts
+        // 配置maven仓库 仓库地址可配置多个 执行publish任务时 会把aar包发步到所有指定的maven仓库
+        repositories { RepositoryHandler handler ->
+
+            if (!isRemoteAar.toBoolean()) {
+                //执行命令 右侧 gradle -> xxx-xxx[common-module] -> Tasks -> publishing -> publish
+                // 指定路径的本地仓库
+                handler.mavenLocal()
+                handler.maven {
+                    url "${rootDir}/repo"
+                }
+            } else {
+                // 远程仓库
+                handler.maven { MavenArtifactRepository mavenArtifactRepository ->
+                    name = "GitHubPackages"
+                    // maven 仓库地址
+                    url = uri(mavenUrl)
+                    // 访问仓库的 账号和密码
+                    credentials {
+                        username = mavenUsername
+                        password = mavenPassword
+                    }
+                }
+            }
+        }
+
+        publications {
+
+            MevonBaidu(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'baidu'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact baidu    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonAuth(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'auth'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact auth    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonAuthlog(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'authlog'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact authlog    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonAuthmain(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'authmain'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact authmain    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonAuthucarsh(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'authucarsh'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact authucarsh    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonYinLian(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'yinlian'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact yinlian    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+
+            MevonABCbank(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'abcbank'
+                version = '1.0.0'
+                artifact(androidSourcesJar)//将源码打包进aar，如果不需要可以去掉
+                artifact(androidJavadocsJar)//将注释打包进aar，如果不需要可以去掉
+                // 将aar推送到远程仓库
+                artifact yinlian    //Example: *./target/myJavaClasses.jar*
+                // pom文件中声明依赖，从而传递到使用方
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        // 避免出现空节点或 artifactId=unspecified 的节点
+                        if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                            println "dependency=${it.toString()}"
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('scope', 'implementation')
+                        }
+                    }
+                }
+                // pom文件中声明依赖，从而传递到使用方
+
+            }
+        }
+
+    }
+}
