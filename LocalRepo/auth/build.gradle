@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-def baidu = artifacts.add("default", file('../auth/auth_number.aar'))
+def auth = artifacts.add("default", file('../auth/auth_number.aar'))
