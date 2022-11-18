@@ -30,15 +30,14 @@ afterEvaluate {
                     url "${rootDir}/repo"
                 }
             } else {
-                // 远程仓库
-                handler.maven { MavenArtifactRepository mavenArtifactRepository ->
-                    name = "GitHubPackages"
-                    // maven 仓库地址
-                    url = uri(mavenUrl)
-                    // 访问仓库的 账号和密码
-                    credentials {
-                        username = mavenUsername
-                        password = mavenPassword
+                maven {
+                    url uri("https://gitlab.ejiayou.com/api/v4/projects/578/packages/maven")
+                    credentials(HttpHeaderCredentials) {
+                        name = "Deploy-Token"
+                        value = "NyHu_b5KQ9qRva6MU2J6"
+                    }
+                    authentication {
+                        header(HttpHeaderAuthentication)
                     }
                 }
             }
@@ -50,7 +49,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'baidu'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact baidu    //Example: *./target/myJavaClasses.jar*
 
@@ -60,7 +59,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'auth'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact auth    //Example: *./target/myJavaClasses.jar*
 
@@ -70,7 +69,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'authlog'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact authlog    //Example: *./target/myJavaClasses.jar*
 
@@ -80,7 +79,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'authmain'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact authmain    //Example: *./target/myJavaClasses.jar*
 
@@ -90,7 +89,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'authucarsh'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact authucarsh    //Example: *./target/myJavaClasses.jar*
 
@@ -100,7 +99,7 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'yinlian'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact yinlian    //Example: *./target/myJavaClasses.jar*
 
@@ -110,9 +109,9 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 groupId = 'ejiayou.libs.module'
                 artifactId = 'abcbank'
-                version = '1.0.1'
+                version = '1.0.0'
                 // 将aar推送到远程仓库
-                artifact yinlian    //Example: *./target/myJavaClasses.jar*
+                artifact abcbank    //Example: *./target/myJavaClasses.jar*
             }
         }
 
