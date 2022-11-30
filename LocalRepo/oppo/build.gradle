@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+def authlog = artifacts.add("default", file('../oppo/com.heytap.msp_3.1.0.aar'))

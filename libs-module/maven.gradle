@@ -14,7 +14,8 @@ configurations.maybeCreate("default")
 def yinlian = artifacts.add("default", file('../LocalRepo/yinlian/UPPayAssistEx.jar'))
 configurations.maybeCreate("default")
 def abcbank = artifacts.add("default", file('../LocalRepo/abcbank/BankABCCaller.jar'))
-
+configurations.maybeCreate("default")
+def oppo = artifacts.add("default", file('../LocalRepo/oppo/com.heytap.msp_3.1.0.aar'))
 afterEvaluate {
     publishing {
 
@@ -112,6 +113,14 @@ afterEvaluate {
                 version = '1.0.0'
                 // 将aar推送到远程仓库
                 artifact abcbank    //Example: *./target/myJavaClasses.jar*
+            }
+            MevonOppo(MavenPublication) {
+                // Applies the component for the release build variant.
+                groupId = 'ejiayou.libs.module'
+                artifactId = 'oppo'
+                version = '1.0.0'
+                // 将aar推送到远程仓库
+                artifact oppo    //Example: *./target/myJavaClasses.jar*
             }
         }
 

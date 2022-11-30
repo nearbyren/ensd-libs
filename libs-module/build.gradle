@@ -45,4 +45,5 @@ dependencies {
     api project(path: ':LocalRepo:authmain')
     api project(path: ':LocalRepo:authucarsh')
     api project(path: ':LocalRepo:yinlian')
+    api project(path: ':LocalRepo:oppo')
 }
